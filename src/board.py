@@ -25,9 +25,9 @@ class Board:
         # Update score
         if piece_taken:
             if piece_taken.color == "white":
-                self.white_score -= piece_taken.value
+                self.white_score -= abs(piece_taken.value)
             else:
-                self.black_score -= piece_taken.value
+                self.black_score -= abs(piece_taken.value)
 
         # Update the board
         self.squares[initial.row][initial.col].piece = None
@@ -43,9 +43,9 @@ class Board:
                                        en_passant_row=initial.row, en_passant_col=initial.col + diff))
                 if piece_taken:
                     if piece_taken.color == "white":
-                        self.white_score -= piece_taken.value
+                        self.white_score -= abs(piece_taken.value)
                     else:
-                        self.black_score -= piece_taken.value
+                        self.black_score -= abs(piece_taken.value)
             else:
                 self.check_promotion(piece, final)
                 self.moves.append(Move(initial, final, piece, piece_taken,
@@ -77,9 +77,9 @@ class Board:
 
         if piece_taken:
             if piece_taken.color == "white":
-                self.white_score += piece_taken.value
+                self.white_score += abs(piece_taken.value)
             else:
-                self.black_score += piece_taken.value
+                self.black_score += abs(piece_taken.value)
 
         # Move the piece back to its original position
         self.squares[last_initial.row][last_initial.col].piece = moved_piece

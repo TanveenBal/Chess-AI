@@ -67,18 +67,25 @@ class Main:
         dragger.undrag_piece()
 
     def ai_move(self, gui, board, dragger, event):
-        ai_move = self.ai.find_best_move(board)
-        print(ai_move)
-        # ai_move_square = ai_move.initial
-        # if board.squares[ai_move_square.row][ai_move_square.col].has_piece():
-        #     piece = board.squares[ai_move_square.row][ai_move_square.col].piece
-        #     if piece.color == gui.turn:
-        #         board.calc_move(piece, ai_move_square.row, ai_move_square.col, bool=True)
-        #         dragger.save_initial(event.pos)
-        #         dragger.drag_piece(piece)
-        #         gui.show_bg(self.screen)
-        #         gui.show_last_move(self.screen)
-        #         gui.show_moves(self.screen)
+        ai_move = self.ai.find_best_move(deepcopy(board))
+        if ai_move:
+            ai_move_initial = ai_move.initial
+            ai_move_final = ai_move.final
+            if board.squares[ai_move_initial.row][ai_move_initial.col].has_piece():
+                piece = board.squares[ai_move_initial.row][ai_move_initial.col].piece
+                if piece.color == gui.turn:
+                    normal_capture = board.squares[ai_move_final.row][ai_move_final.col].has_piece()
+                    en_passant_capture = (ai_move_final.col - ai_move_initial.col != 0 and
+                                          board.squares[ai_move_final.row][ai_move_final.col].is_empty() and
+                                          isinstance(board.squares[ai_move_initial.row][ai_move_initial.col].piece,
+                                                     Pawn))
+                    captured = normal_capture or en_passant_capture
+                    board.move(piece, ai_move)
+                    gui.play_sound(captured)
+                    gui.show_bg(self.screen)
+                    gui.show_last_move(self.screen)
+                    gui.show_pieces(self.screen)
+                    gui.next_turn()
 
     def run(self):
         screen = self.screen
@@ -93,8 +100,8 @@ class Main:
             gui.show_hover(self.screen)
             if dragger.dragging:
                 dragger.update_blit(screen)
-            # if gui.turn == self.ai.color:
-            #     self.ai_move(gui, board, dragger, event)
+            if gui.turn == self.ai.color:
+                self.ai_move(gui, board, dragger, event)
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -104,8 +111,6 @@ class Main:
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.mouse_up(gui, board, dragger, event)
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_d:
-                        self.ai_move(gui, board, dragger, event)
                     if event.key == pygame.K_u:
                         if board.undo_move():
                             gui.next_turn()

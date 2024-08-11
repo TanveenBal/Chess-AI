@@ -1,9 +1,12 @@
 import math
 import random
+from move import Move
+from square import Square
 
 class ChessAI:
     def __init__(self, color):
         self.color = color
+        self.start_depth = 2
 
     def evaluate(self, board, maximizing_color):
         if maximizing_color == 'white':
@@ -12,7 +15,7 @@ class ChessAI:
             return board.black_score - board.white_score
 
     def minimax(self, board, depth, alpha, beta, maximizing_player):
-        if depth == 0:
+        if depth == 0 or board.game_over():
             color_eval = "white" if maximizing_player else "black"
             return None, self.evaluate(board, color_eval)
 
@@ -50,4 +53,4 @@ class ChessAI:
             return best_move, min_eval
 
     def find_best_move(self, board):
-        return self.minimax(board, 2, -math.inf, math.inf, True)[0]
+        return self.minimax(board, self.start_depth, -math.inf, math.inf, True)[0]

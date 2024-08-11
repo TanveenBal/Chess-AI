@@ -58,8 +58,9 @@ class Board:
                 self.moves.pop()
                 diff = final.col - initial.col
                 rook = piece.left_rook if (diff < 0) else piece.right_rook
-                self.move(rook, rook.moves[-1])
-                self.moves.append(Move(initial, final, piece, piece_taken=None, castle=True))
+                if (len(rook.moves) > 0):
+                    self.move(rook, rook.moves[-1])
+                    self.moves.append(Move(initial, final, piece, piece_taken=None, castle=True))
 
         # Update piece state
         piece.moved = True
@@ -160,8 +161,15 @@ class Board:
                 self.squares[row][col] = Square(row, col)
 
     def game_over(self):
-        if self.moves:
-            return self.squares[self.moves[-1].final.row][self.moves[-1].final.col]
+        # Check if there are no valid moves for the current player
+        current_player = "white" if len(self.moves) % 2 == 0 else "black"
+        if not self.get_moves(current_player):
+            # If current player is in check, it's checkmate
+            if self.in_check(self.squares[self.moves[-1].final.row][self.moves[-1].final.col].piece,
+                             Move(self.moves[-1].initial, self.moves[-1].final)):
+                return "checkmate"
+            # If not in check and no valid moves, it's stalemate
+            return "stalemate"
         return False
 
     def _add_piece(self, color):

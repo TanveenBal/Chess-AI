@@ -6,6 +6,8 @@ from square import Square
 from ai import ChessAI
 from piece import *
 from move import Move
+import time
+
 class Main:
     def __init__(self):
         pygame.init()
@@ -62,9 +64,16 @@ class Main:
                     gui.show_bg(self.screen)
                     gui.show_last_move(self.screen)
                     gui.show_pieces(self.screen)
-                    gui.next_turn()
+                    gui.next_turn()  # Ensure the turn is updated after your move
 
-        dragger.undrag_piece()
+            dragger.undrag_piece()
+
+        # After processing the player move, check if it's AI's turn
+        if not dragger.dragging and gui.turn == self.ai.color:
+            start = time.time()
+            self.ai_move(gui, board, dragger, event)  # AI move should consider the latest board state
+            end = time.time()
+            print(end - start)
 
     def ai_move(self, gui, board, dragger, event):
         ai_move = self.ai.find_best_move(deepcopy(board))
@@ -86,6 +95,9 @@ class Main:
                     gui.show_last_move(self.screen)
                     gui.show_pieces(self.screen)
                     gui.next_turn()
+        else:
+            pygame.quit()
+            sys.exit()
 
     def run(self):
         screen = self.screen
@@ -93,16 +105,6 @@ class Main:
         board = self.gui.board
         dragger = self.gui.dragger
         while True:
-            gui.show_bg(self.screen)
-            gui.show_last_move(self.screen)
-            gui.show_moves(self.screen)
-            gui.show_pieces(self.screen)
-            gui.show_hover(self.screen)
-            if dragger.dragging:
-                dragger.update_blit(screen)
-            if gui.turn == self.ai.color:
-                self.ai_move(gui, board, dragger, event)
-            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.mouse_down(gui, board, dragger, event)
@@ -122,10 +124,18 @@ class Main:
                         gui = self.gui
                         board = self.gui.board
                         dragger = self.gui.dragger
-
-                if event.type == pygame.QUIT:
+                elif event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+            gui.show_bg(self.screen)
+            gui.show_last_move(self.screen)
+            gui.show_moves(self.screen)
+            gui.show_pieces(self.screen)
+            gui.show_hover(self.screen)
+            if dragger.dragging:
+                dragger.update_blit(screen)
+            pygame.display.flip()
 
 
 if __name__ == '__main__':

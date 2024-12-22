@@ -8,7 +8,7 @@ class ChessAI:
         self.color = max_color
         self.max_color = max_color
         self.min_color = min_color
-        self.start_depth = 3
+        self.start_depth = 2 # CHANGE THIS, The depth is the amount of moves it thinks ahead, more moves makes it slower.
 
     def evaluate(self, board, eval_color):
         if eval_color == "white":
@@ -18,7 +18,7 @@ class ChessAI:
 
     def minimax(self, board, depth, alpha, beta, maximizing_player):
         if depth == 0 or board.game_over():
-            color_eval = "white" if maximizing_player else "black" # May need to swap if else
+            color_eval = "white" if maximizing_player else "black"
             return None, self.evaluate(board, color_eval)
         best_move = None
         

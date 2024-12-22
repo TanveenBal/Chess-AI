@@ -19,7 +19,7 @@ class Piece:
         self.texture_rect = texture_rect
 
     def set_texture(self, size=80):
-        self.texture = f"../assets/pieces/{size}px/{self.color}_{self.name}.png"
+        self.texture = f"assets/pieces/{size}px/{self.color}_{self.name}.png"
 
     def add_move(self, move):
         self.moves.append(move)
@@ -141,7 +141,7 @@ class Knight(Piece):
 
 class Bishop(Piece):
     def __init__(self, color):
-        super().__init__("bishop", color, 3.00)
+        super().__init__("bishop", color, 3.0)
 
     def hover_moves(self, row, col, squares, board, bool=True):
         self.straight_move([
@@ -183,7 +183,7 @@ class King(Piece):
     def __init__(self, color):
         self.left_rook = None
         self.right_rook = None
-        super().__init__("king", color, inf)
+        super().__init__("king", color, 500.0)
 
     def hover_moves(self, row, col, squares, board, bool=True):
         adjs = [

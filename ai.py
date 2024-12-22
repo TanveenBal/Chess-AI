@@ -4,28 +4,30 @@ from move import Move
 from square import Square
 
 class ChessAI:
-    def __init__(self, color):
-        self.color = color
-        self.start_depth = 2
+    def __init__(self, max_color, min_color):
+        self.color = max_color
+        self.max_color = max_color
+        self.min_color = min_color
+        self.start_depth = 3
 
-    def evaluate(self, board, maximizing_color):
-        if maximizing_color == 'white':
+    def evaluate(self, board, eval_color):
+        if eval_color == "white":
             return board.white_score - board.black_score
         else:
             return board.black_score - board.white_score
 
     def minimax(self, board, depth, alpha, beta, maximizing_player):
         if depth == 0 or board.game_over():
-            color_eval = "white" if maximizing_player else "black"
-            return None, self.evaluate(board, color_eval)
-
-        moves = board.get_moves(self.color)
-        if moves is None:
-            color_eval = "white" if maximizing_player else "black"
+            color_eval = "white" if maximizing_player else "black" # May need to swap if else
             return None, self.evaluate(board, color_eval)
         best_move = None
-
+        
         if maximizing_player:
+            moves = board.get_moves(self.max_color)
+            if moves is None:
+                color_eval = "white" if maximizing_player else "black"
+                return None, self.evaluate(board, color_eval)
+            
             max_eval = -math.inf
             for move in moves:
                 board.move(move.initial.piece, move)
@@ -39,6 +41,11 @@ class ChessAI:
                     break
             return best_move, max_eval
         else:
+            moves = board.get_moves(self.min_color)
+            if moves is None:
+                color_eval = "white" if maximizing_player else "black"
+                return None, self.evaluate(board, color_eval)
+            
             min_eval = math.inf
             for move in moves:
                 board.move(move.initial.piece, move)

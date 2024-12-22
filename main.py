@@ -14,7 +14,7 @@ class Main:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Chess")
         self.gui = GUI()
-        self.ai = ChessAI("black")
+        self.ai = ChessAI(max_color="black", min_color="white")
 
     def mouse_down(self, gui, board, dragger, event):
         dragger.update_mouse(event.pos)

@@ -11,8 +11,8 @@ class Board:
         self._create()
         self._add_piece("white")
         self._add_piece("black")
-        self.white_score = 39
-        self.black_score = 39
+        self.white_score = 539
+        self.black_score = 539
 
     def move(self, piece, move):
         initial = move.initial

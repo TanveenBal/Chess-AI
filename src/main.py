@@ -70,10 +70,7 @@ class Main:
 
         # After processing the player move, check if it's AI's turn
         if not dragger.dragging and gui.turn == self.ai.color:
-            start = time.time()
             self.ai_move(gui, board, dragger, event)  # AI move should consider the latest board state
-            end = time.time()
-            print(end - start)
 
     def ai_move(self, gui, board, dragger, event):
         ai_move = self.ai.find_best_move(deepcopy(board))

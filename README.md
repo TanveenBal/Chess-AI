@@ -9,6 +9,10 @@ This project is a Chess game implemented using Pygame, with a built-in AI. The a
 - Undo and restart functionality.
 - Customizable chess themes and board resets.
 
+<div style="text-align: center;">
+    <img src="src/Game.gif" alt="Example of the Minimax Algorithm">
+</div>
+
 ## How the AI Works
 
 The Chess AI employs the Alpha-Beta Pruning optimization for the Minimax algorithm, making it an efficient decision-making engine for complex chess positions.
@@ -81,8 +85,11 @@ Alpha-Beta Pruning improves the Minimax algorithm by "pruning" (ignoring) branch
 - Press U to undo a move.
 - Press R to reset the board.
 - Press T to toggle the chess theme.
+- AI will automatically play as the opposing side (black team).
 
-AI will automatically play as the opposing side (black team).
+<div style="text-align: center;">
+    <img src="src/Themes.gif" alt="Example of the Minimax Algorithm">
+</div>
 
 ## File Structure
 
